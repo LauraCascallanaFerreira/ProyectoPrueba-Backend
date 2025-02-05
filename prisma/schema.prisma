@@ -6,11 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model User{
@@ -30,7 +31,8 @@ model User{
 
 model Offerts{
   id Int @id @default(autoincrement())
-  name String 
+  title String 
+  author String
   description String? 
   active Boolean @default(true)
   contactEmail String?
