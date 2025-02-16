@@ -1,11 +1,11 @@
 import { Router } from "express";
+import { isAuthenticate } from "../middlewares/auth.middleware";
 import { UserController } from "../controllers/user.controllers";
-import {isAuthenticated} from "../middlewares/auth.middleware"
-import { isAdmin } from "@/middlewares/isAdmin.middleware";
+import { isAdmin } from "../middlewares/isAdmin.middleware";
 
 const router = Router()
-
-router.get('/', isAuthenticated, isAdmin, UserController.getAll)
-router.get('/profile', isAuthenticated, UserController.profile)
+    
+router.get('/profile', isAuthenticate , UserController.profile)
+router.get('/', isAuthenticate, isAdmin , UserController.getAll)
 
 export default router

@@ -1,28 +1,43 @@
-import express, {Request, Response} from 'express'
+import express, {Response, Request} from 'express'
 import authRouter from './routes/auth.routes'
-import userRoute  from './routes/user.routes'
+import userRouter from './routes/user.routes'
+import offerRouter from './routes/paintings.routes'
+import categoryRouter from './routes/category.routes'
+
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import compression from 'compression'
-import cookieParser from 'cookie-parser'
+import cookieParser  from 'cookie-parser'
+import cors  from 'cors'
+import morgan from 'morgan'
 
 const app = express()
 
+app.use(cookieParser())
+
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://empleatetufront.onrender.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json())
+app.use(helmet())
+app.use(compression())
+app.use(morgan('tiny'))
 const limiter = rateLimit({
-    max:3,
-    windowMs:1000*15*60
+    max: 1000,
+    windowMs: 1000 * 15 * 60 // 15 minutos
 })
 app.use(limiter)
 
-app.use(helmet())
-app.use(compression())
-app.use(cookieParser())
+app.use('/api/auth',authRouter)
+app.use('/api/users',userRouter)
+app.use('/api/offers', offerRouter)
+app.use('/api/categories', categoryRouter)
 
-app.use(express.json())
-app.use('/api/auth', authRouter)
-app.use('/api/user', userRoute)
-
-app.get('/', (req:Request, res:Response) => {
+app.get('/', (req:Request, res:Response)=>{
     res.send('Bienvenido al backend (api rest)')
 })
 

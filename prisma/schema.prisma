@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -19,7 +13,7 @@ model User{
   name String 
   email String @unique
   password String
-  role                 String? //admin vip null
+  role String? //admin vip null
   active Boolean @default(true)
   acceptNotifications Boolean @default(true)
 
@@ -27,9 +21,11 @@ model User{
   updatedAt DateTime @updatedAt
 
   Rate Rate[]
+
+  Paintings Paintings[]
 }
 
-model Offerts{
+model Paintings{
   id Int @id @default(autoincrement())
   title String 
   author String
@@ -45,6 +41,9 @@ model Offerts{
   createdAt            DateTime @default(now())
   updateAt             DateTime @updatedAt
 
+  idUserCreator        Int
+  userCreator          User @relation(fields: [idUserCreator], references: [id])
+
   Rate Rate[]
 
 }
@@ -56,19 +55,19 @@ model Category{
   createdAt            DateTime @default(now())
   updateAt             DateTime @updatedAt
 
-  offerts Offerts[]
+  paintings Paintings[]
 }
 
 model Rate{
   idUser Int
-  idOffer Int 
+  idPainting Int 
   value Int
 
   createdAt            DateTime @default(now())
   updateAt             DateTime @updatedAt
 
   user                 User @relation(fields: [idUser], references: [id])
-  offer                Offerts @relation(fields: [idOffer], references: [id])
+  painting              Paintings @relation(fields: [idPainting], references: [id])
 
-  @@id([idUser, idOffer])
+  @@id([idUser, idPainting])
 }

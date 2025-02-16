@@ -1,14 +1,14 @@
-import { Response, Request, NextFunction } from 'express'
+import {Response, Request, NextFunction} from 'express'
 
-export const isAdmin = (req:Request, res:Response, next: NextFunction): any => {
-    const {role} = req.body.user
+export const isAdmin = (req:Request, res:Response, next:NextFunction):any => {
+    const role = req.user?.role
     try{
-        if(role=='admin'){
+        if(role === 'admin'){
             next()
-        } else {
-            res.status(401).json({message: 'Access denied, no adamin'})
+        }else{
+            res.status(401).json({error:'Access denied, no admin'})
         }
-    } catch(error){
-        res.status(401).json({error: 'Invalid token'})
+    }catch(error){
+        res.status(401).json({error:'Invalid token'})
     }
 }
