@@ -9,7 +9,6 @@ const TOKEN_PASSWORD = process.env.TOKEN_PASSWORD || 'pass'
 export class AuthService {
     static async register(user: User) {
 
-        //const findUser = await prisma.user.findUnique({where: {email: user.email}})
         const findUser = await prisma.user.findUnique({where: {email: user.email}})
         if (findUser) throw new HttpException(409, `User ${user.email} already exists`)
 
