@@ -1,7 +1,7 @@
 import express, {Response, Request} from 'express'
 import authRouter from './routes/auth.routes'
 import userRouter from './routes/user.routes'
-import offerRouter from './routes/paintings.routes'
+import paintingRouter from './routes/paintings.routes'
 import categoryRouter from './routes/category.routes'
 
 import rateLimit from 'express-rate-limit'
@@ -34,7 +34,7 @@ app.use(limiter)
 
 app.use('/api/auth',authRouter)
 app.use('/api/users',userRouter)
-app.use('/api/offers', offerRouter)
+app.use('/api/offers', paintingRouter)
 app.use('/api/categories', categoryRouter)
 
 app.get('/', (req:Request, res:Response)=>{
