@@ -3,6 +3,7 @@ import { UserService } from "../services/user.services";
 import {Response, Request, NextFunction} from 'express'
 
 export class UserController{
+    
     static async profile(req:Request, res:Response, next:NextFunction){
         try{
             const  email = req.user?.email

@@ -14,5 +14,6 @@ router.delete('/:id',isAuthenticate,isAdmin, PaintingsController.delete)
 router.put('/:id',isAuthenticate,isAdmin, paintingValidation, ValidationMiddleware, PaintingsController.update)   
 router.post('/:id/rate/',isAuthenticate, rateValidation, PaintingsController.rate)  
 router.get('/:id/rate/', isAuthenticate, PaintingsController.getRate)
+router.get('/:id/myRate/', isAuthenticate, PaintingsController.getMyRate)
 
 export default router

@@ -20,6 +20,13 @@ export const paintingValidation = [
     body('expired').isISO8601().toDate().withMessage('Formato de fecha incorrecto')
 ]
 
+export const suggestionValidation = [
+    body('message')
+        .isLength({min:10, max:200}).withMessage('Mensaje mas de 10 caracteres'),
+        body('published').optional().isISO8601().toDate().withMessage('Formato de fecha incorrecto'),
+        body('expired').isISO8601().toDate().withMessage('Formato de fecha incorrecto')
+]
+
 export const categoryValidation = [
     body('name').notEmpty().withMessage('Name required')
 ]

@@ -15,6 +15,7 @@ export class UserService {
         if(!findUser) throw new HttpException(404, 'User not found')
          return findUser
      }
+    
     static async getAll(){
         const users = await prisma.user.findMany({
             omit: {password:true}

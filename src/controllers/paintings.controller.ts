@@ -91,4 +91,19 @@ export class PaintingsController{
             next(error)
         }
     }
+
+    static async getMyRate(req:Request, res:Response, next: NextFunction){
+        try{
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new HttpException(400, "Invalid painting ID");
+            
+            const userId = req.user?.id
+            if(!userId) throw new HttpException(400, "User creator ID is required");
+
+            const rate = await PaintingsService.getMyRate(userId, id)
+            res.status(200).json(rate)
+        }catch(error){
+            next(error)
+        }
+    }
 }

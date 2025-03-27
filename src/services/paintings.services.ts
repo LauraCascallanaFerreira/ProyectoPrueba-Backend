@@ -1,13 +1,14 @@
-import { Paintings, PrismaClient} from "@prisma/client";
+import { Paintings} from "@prisma/client";
 import { HttpException } from "../exceptions/httpExceptions";
+import { prisma } from "@/database/database";
 
-const prisma = new PrismaClient()
+
 
 export class PaintingsService{
 
     static async getById(id: number){
         const findPainting = await prisma.paintings.findUnique({where:{id}})
-        if(!findPainting) throw new HttpException(404, 'User not found')
+        if(!findPainting) throw new HttpException(404, 'Painting not found')
         return findPainting
     }
 
@@ -35,14 +36,23 @@ export class PaintingsService{
         });
     }
 
-    static async create(idUser: number, paintings:Paintings){
-        console.log('creando', idUser)
+    static async create(id: number, paintings:Paintings){
+        console.log("creando", id)
+        console.log(await prisma.user.findMany())
+        console.log(await prisma.user.findUnique({where:{id}}))
         return await prisma.paintings.create({
             data: {
-                ...paintings,
-                idUserCreator: idUser
+                title: paintings.title,
+                author: paintings.author,
+                description: paintings.description,
+                active: paintings.active,
+                contactEmail: paintings.contactEmail,
+                published: paintings.published,
+                expired: paintings.expired,
+                idCategory: paintings.idCategory,
+                idUserCreator: id
             }
-        })
+        });
     }
 
     static async update(id:number, paintings: Paintings){
@@ -90,8 +100,14 @@ export class PaintingsService{
           _count: { value: true },
         });
         return {
-          totalRatings: ratingStats._count.value,
-          averageRating: ratingStats._avg.value?.toFixed(2)
-        }
+          totalRatings: ratingStats._count.value || 0,
+          averageRating: ratingStats._avg.value?.toFixed(2) || 0,
+        };
+      }
+
+      static async getMyRate(idUser: number, idPainting: number) {
+        return await prisma.rate.findUnique({
+          where: { idUser_idPainting: { idUser, idPainting } },
+        });
       }
 }

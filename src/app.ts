@@ -34,7 +34,7 @@ app.use(limiter)
 
 app.use('/api/auth',authRouter)
 app.use('/api/users',userRouter)
-app.use('/api/offers', paintingRouter)
+app.use('/api/paintings', paintingRouter)
 app.use('/api/categories', categoryRouter)
 
 app.get('/', (req:Request, res:Response)=>{

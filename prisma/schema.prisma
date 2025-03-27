@@ -21,8 +21,8 @@ model User{
   updatedAt DateTime @updatedAt
 
   Rate Rate[]
-
   Paintings Paintings[]
+  Suggestions Suggestion[]
 }
 
 model Paintings{
@@ -35,17 +35,35 @@ model Paintings{
   published DateTime @default(now()) //formato iso8601
   expired DateTime
 
+  createdAt            DateTime @default(now())
+  updateAt             DateTime @updatedAt
+
   idCategory           Int?
   category             Category? @relation(fields: [idCategory], references: [id])
 
-  createdAt            DateTime @default(now())
-  updateAt             DateTime @updatedAt
+  
 
   idUserCreator        Int
   userCreator          User @relation(fields: [idUserCreator], references: [id])
 
   Rate Rate[]
+  Suggestions Suggestion[]
+}
 
+model Suggestion {
+  id              Int      @id @default(autoincrement()) 
+  message         String
+  published       DateTime @default(now()) //formato iso8601
+  expired         DateTime
+
+  createdAt       DateTime @default(now()) 
+  updatedAt       DateTime @updatedAt 
+
+  idUserCreator   Int 
+  userCreator     User    @relation(fields: [idUserCreator], references: [id]) 
+  
+  idPainting      Int? 
+  painting        Paintings? @relation(fields: [idPainting], references: [id]) 
 }
 
 model Category{
