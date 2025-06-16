@@ -12,7 +12,7 @@ model User{
   id Int @id @default(autoincrement())
   name String 
   email String @unique
-  password String
+  password String   
   role String? //admin vip null
   active Boolean @default(true)
   acceptNotifications Boolean @default(true)
@@ -22,7 +22,8 @@ model User{
 
   Rate Rate[]
   Paintings Paintings[]
-  Suggestions Suggestion[]
+
+  Review Review[]
 }
 
 model Paintings{
@@ -47,23 +48,15 @@ model Paintings{
   userCreator          User @relation(fields: [idUserCreator], references: [id])
 
   Rate Rate[]
-  Suggestions Suggestion[]
 }
 
-model Suggestion {
-  id              Int      @id @default(autoincrement()) 
-  message         String
-  published       DateTime @default(now()) //formato iso8601
-  expired         DateTime
-
-  createdAt       DateTime @default(now()) 
-  updatedAt       DateTime @updatedAt 
-
-  idUserCreator   Int 
-  userCreator     User    @relation(fields: [idUserCreator], references: [id]) 
-  
-  idPainting      Int? 
-  painting        Paintings? @relation(fields: [idPainting], references: [id]) 
+model Review {
+  id        Int      @id @default(autoincrement())
+  comment   String
+  rating    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
 model Category{
