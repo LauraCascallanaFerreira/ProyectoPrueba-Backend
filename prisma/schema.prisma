@@ -1,53 +1,44 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = "file:dev.db"
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  name String 
-  email String @unique
-  password String   
-  role String? //admin vip null
-  active Boolean @default(true)
-  acceptNotifications Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Rate Rate[]
-  Paintings Paintings[]
-
-  Review Review[]
+model User {
+  id                  Int         @id @default(autoincrement())
+  name                String
+  email               String      @unique
+  password            String
+  role                String?
+  active              Boolean     @default(true)
+  acceptNotifications Boolean     @default(true)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  Paintings           Paintings[]
+  Rate                Rate[]
+  Review              Review[]
 }
 
-model Paintings{
-  id Int @id @default(autoincrement())
-  title String 
-  author String
-  description String? 
-  active Boolean @default(true)
-  contactEmail String?
-  published DateTime @default(now()) //formato iso8601
-  expired DateTime
-
-  createdAt            DateTime @default(now())
-  updateAt             DateTime @updatedAt
-
-  idCategory           Int?
-  category             Category? @relation(fields: [idCategory], references: [id])
-
-  
-
-  idUserCreator        Int
-  userCreator          User @relation(fields: [idUserCreator], references: [id])
-
-  Rate Rate[]
+model Paintings {
+  id            Int       @id @default(autoincrement())
+  title         String
+  author        String
+  description   String?
+  active        Boolean   @default(true)
+  contactEmail  String?
+  published     DateTime  @default(now())
+  expired       DateTime
+  idCategory    Int?
+  createdAt     DateTime  @default(now())
+  updateAt      DateTime  @updatedAt
+  idUserCreator Int
+  userCreator   User      @relation(fields: [idUserCreator], references: [id])
+  category      Category? @relation(fields: [idCategory], references: [id])
+  Rate          Rate[]
 }
 
 model Review {
@@ -55,30 +46,26 @@ model Review {
   comment   String
   rating    Int
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
   userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
 
-model Category{
-  id Int @id @default(autoincrement())
-  name String @unique
-
-  createdAt            DateTime @default(now())
-  updateAt             DateTime @updatedAt
-
+model Category {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  createdAt DateTime    @default(now())
+  updateAt  DateTime    @updatedAt
   paintings Paintings[]
 }
 
-model Rate{
-  idUser Int
-  idPainting Int 
-  value Int
-
-  createdAt            DateTime @default(now())
-  updateAt             DateTime @updatedAt
-
-  user                 User @relation(fields: [idUser], references: [id])
-  painting              Paintings @relation(fields: [idPainting], references: [id])
+model Rate {
+  idUser     Int
+  idPainting Int
+  value      Int
+  createdAt  DateTime  @default(now())
+  updateAt   DateTime  @updatedAt
+  painting   Paintings @relation(fields: [idPainting], references: [id])
+  user       User      @relation(fields: [idUser], references: [id])
 
   @@id([idUser, idPainting])
 }
